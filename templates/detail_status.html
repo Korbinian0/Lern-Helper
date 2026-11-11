@@ -1,0 +1,9 @@
+<div id="detail-status" {% if job.status.value in ['queued', 'processing'] %}hx-get="/jobs/{{ job.id }}/detail-status" hx-trigger="load, every 3s" hx-swap="outerHTML"{% endif %}>
+{% if job.status.value == 'completed' %}
+<div class="empty-state"><span class="status-pill status-completed">Verarbeitung abgeschlossen</span><h2>Deine Karten sind bereit.</h2><p>{{ job.cards|length }} Karten wurden erstellt.</p><a class="button button-dark" href="/jobs/{{ job.id }}">Ergebnis anzeigen <span>→</span></a></div>
+{% elif job.status.value == 'failed' %}
+<div class="empty-state"><span class="status-pill status-failed">Verarbeitung fehlgeschlagen</span><h2>Der Auftrag konnte nicht abgeschlossen werden.</h2><p>{{ job.error }}</p><a href="/dashboard" class="text-link">Zur Auftragsübersicht <span>↗</span></a></div>
+{% else %}
+<div class="empty-state"><span class="status-pill status-{{ job.status.value }}">{{ 'In Warteschlange' if job.status.value == 'queued' else 'In Verarbeitung' }}</span><h2>{{ job.progress_text }}</h2><div class="progress-track"><span style="width: {{ job.progress }}%"></span></div></div>
+{% endif %}
+</div>

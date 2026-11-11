@@ -1,0 +1,20 @@
+<article class="job-row" id="job-{{ job.id }}" {% if job.status.value in ['queued', 'processing'] %}hx-get="/jobs/{{ job.id }}/status" hx-trigger="load, every 3s" hx-swap="outerHTML"{% endif %}>
+<div class="job-file"><span class="file-icon {% if job.status.value == 'completed' %}file-ready{% elif job.status.value == 'failed' %}file-failed{% endif %}">{% if job.filename.lower().endswith('.pdf') %}PDF{% else %}IMG{% endif %}</span><div><strong>{{ job.filename }}</strong><small>Erstellt {{ job.created_at.strftime('%d.%m.%Y · %H:%M') if job.created_at else 'gerade eben' }}</small></div></div>
+<div class="job-progress">
+  {% if job.status.value in ['queued', 'processing'] %}
+  <div class="progress-copy"><span class="status-pill status-{{ job.status.value }}">{{ 'In Warteschlange' if job.status.value == 'queued' else 'In Verarbeitung' }}</span><span>{{ job.progress_text }}{% if job.status.value == 'queued' and position %} · {{ position }}. in der Queue{% endif %}</span></div>
+  <div class="progress-track"><span style="width: {{ job.progress }}%"></span></div>
+  {% elif job.status.value == 'completed' %}
+  <div class="progress-copy"><span class="status-pill status-completed">Abgeschlossen</span><span>{{ job.cards|length }} Karten · {{ job.page_count }} Seiten</span></div>
+  {% else %}
+  <div class="progress-copy"><span class="status-pill status-failed">Fehler</span><span class="error-copy">{{ job.error or 'Verarbeitung fehlgeschlagen' }}</span></div>
+  {% endif %}
+</div>
+</article>
+<div class="job-actions">
+  {% if job.status.value == 'completed' %}
+  <a class="text-link" href="/jobs/{{ job.id }}">Ansehen <span>↗</span></a>
+  <a class="download-link" href="/api/jobs/{{ job.id }}/export?format=csv">CSV</a><a class="download-link" href="/api/jobs/{{ job.id }}/export?format=json">JSON</a><a class="download-link" href="/api/jobs/{{ job.id }}/export?format=markdown">MD</a>
+  {% endif %}
+  <button class="icon-action delete-job" type="button" data-job-id="{{ job.id }}" title="Auftrag löschen" aria-label="Auftrag löschen">×</button>
+</div>

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Einstellungen · FlashCard Forge{% endblock %}
+{% block content %}
+<section class="page-heading compact-heading">
+  <div><p class="eyebrow">KONFIGURATION <span>03 / 03</span></p><h1>Deine <em>Werkzeuge.</em></h1></div>
+  <p class="heading-note">Verbinde deinen Ollama-Server und leg fest, wie aus Text lernbare Karten werden.</p>
+</section>
+<form id="settings-form" class="settings-layout">
+  <div class="settings-main">
+    <section class="settings-section">
+      <div class="section-title"><span class="section-count">01</span><div><h2>Ollama-Verbindung</h2><p>Der Server läuft außerhalb dieses Containers.</p></div></div>
+      <label class="field-label" for="ollama_url">Server-URL</label>
+      <div class="inline-field"><input id="ollama_url" name="ollama_url" type="url" value="{{ settings.ollama_url }}" required><button type="button" class="button button-outline" id="load-models">Modelle laden</button></div>
+      <div class="field-grid">
+        <label><span class="field-label">Generierungsmodell</span><select id="model" name="model" data-current="{{ settings.model }}"><option value="{{ settings.model }}">{{ settings.model }}</option></select></label>
+        <label><span class="field-label">Embedding-Modell <small>OPTIONAL</small></span><select id="embedding_model" name="embedding_model" data-current="{{ settings.embedding_model }}"><option value="">Nicht verwenden</option><option value="{{ settings.embedding_model }}">{{ settings.embedding_model }}</option></select></label>
+      </div>
+      <p class="form-message" id="model-message" role="status"></p>
+    </section>
+    <section class="settings-section">
+      <div class="section-title"><span class="section-count">02</span><div><h2>Text & Karten</h2><p>Steuere die Größe der Aufgaben für dein Modell.</p></div></div>
+      <div class="field-grid">
+        <label><span class="field-label">OCR-Sprache</span><input name="ocr_language" value="{{ settings.ocr_language }}" required></label>
+        <label><span class="field-label">Chunk-Größe <small>TOKEN</small></span><input name="chunk_size" type="number" min="100" max="5000" value="{{ settings.chunk_size }}" required></label>
+        <label><span class="field-label">Karten pro Chunk</span><input name="cards_per_chunk" type="number" min="1" max="20" value="{{ settings.cards_per_chunk }}" required></label>
+        <label><span class="field-label">Max. Kontext-Länge</span><input name="context_length" type="number" min="512" max="131072" value="{{ settings.context_length }}" required></label>
+      </div>
+      <label class="range-field"><span class="field-label">Temperatur <output id="temperature-value">{{ settings.temperature }}</output></span><input name="temperature" id="temperature" type="range" min="0" max="1" step="0.1" value="{{ settings.temperature }}"><span class="range-caption"><span>Präzise</span><span>Kreativ</span></span></label>
+    </section>
+    <section class="settings-section last-section">
+      <div class="section-title"><span class="section-count">03</span><div><h2>Export-Format</h2><p>Bestimmt das Standardformat für neue Lernkarten.</p></div></div>
+      <label class="field-label" for="output_format">Standardformat</label>
+      <select id="output_format" name="output_format"><option value="anki_csv" {% if settings.output_format == 'anki_csv' %}selected{% endif %}>Anki CSV</option><option value="json" {% if settings.output_format == 'json' %}selected{% endif %}>JSON</option><option value="markdown" {% if settings.output_format == 'markdown' %}selected{% endif %}>Markdown</option></select>
+    </section>
+  </div>
+  <aside class="settings-side">
+    <div class="side-number">FF / CONFIG</div>
+    <h2>Gute Karten<br>beginnen mit<br><em>guten Fragen.</em></h2>
+    <p>Änderungen werden geprüft, bevor sie gespeichert werden. Der Ollama-Server muss erreichbar sein.</p>
+    <button class="button button-accent full-button" type="submit">Einstellungen speichern <span>→</span></button>
+    <p id="settings-message" class="form-message" role="status"></p>
+    <div class="settings-side-foot">VERBINDUNGSTEST<br><span>GET /api/tags</span></div>
+  </aside>
+</form>
+{% endblock %}

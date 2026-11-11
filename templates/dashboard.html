@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Aufträge · FlashCard Forge{% endblock %}
+{% block content %}
+<section class="page-heading compact-heading">
+  <div><p class="eyebrow">DEINE LERNKARTEN <span>02 / 03</span></p><h1>Aufträge im <em>Blick.</em></h1></div>
+  <a href="/" class="button button-accent heading-action">Neue Karten erstellen <span>→</span></a>
+</section>
+<section class="jobs-section">
+  <div class="section-bar"><h2>Verarbeitung & Verlauf</h2><span>{{ jobs|length }} AUFTRÄGE</span></div>
+  {% if jobs %}
+  <div class="job-list">
+    {% for row in jobs %}{% set job = row.job %}
+    {% set position = row.position %}{% include "job_status.html" %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state"><span class="empty-mark">FF</span><h2>Hier ist noch Platz für Wissen.</h2><p>Lade dein erstes Dokument hoch und beginne mit deinen Lernkarten.</p><a href="/" class="button button-dark">Datei hochladen <span>↗</span></a></div>
+  {% endif %}
+</section>
+{% endblock %}

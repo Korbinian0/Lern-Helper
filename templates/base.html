@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f2ec">
+  <title>{% block title %}FlashCard Forge{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="FlashCard Forge Startseite">
+      <span class="brand-mark">F<span>/</span>F</span>
+      <span>FLASHCARD<br><b>FORGE</b></span>
+    </a>
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <a class="{% if active == 'upload' %}active{% endif %}" href="/">Erstellen</a>
+      <a class="{% if active == 'dashboard' %}active{% endif %}" href="/dashboard">Aufträge</a>
+      <a class="{% if active == 'admin' %}active{% endif %}" href="/admin">Einstellungen</a>
+    </nav>
+    <a class="server-state" href="/admin"><span class="state-dot"></span> Lokale Verarbeitung</a>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer class="footer"><span>FLASHCARD FORGE</span><span>Deine Unterlagen. Deine Karten. Dein Modell.</span></footer>
+</body>
+</html>
